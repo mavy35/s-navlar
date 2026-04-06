@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KTÜ Bahar Ara Sınavları 2025-2026</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px; }
+        .header h1 { color: #1f2937; font-size: 24px; margin-bottom: 8px; }
+        .header p { color: #6b7280; }
+        .filters { display: flex; gap: 16px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+        .filter-label { font-weight: 600; color: #374151; }
+        .grade-btn { padding: 10px 16px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .grade-btn.active-1 { background: #3b82f6; color: white; }
+        .grade-btn.active-2 { background: #10b981; color: white; }
+        .grade-btn.active-4 { background: #8b5cf6; color: white; }
+        .grade-btn.inactive { background: #e5e7eb; color: #6b7280; }
+        .stats { margin-left: auto; display: flex; gap: 16px; }
+        .stat-box { padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .stat-box.exams { background: #dbeafe; color: #1e40af; }
+        .stat-box.students { background: #d1fae5; color: #065f46; }
+        .day-section { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 16px; overflow: hidden; display: none; }
+        .day-section.visible { display: block; }
+        .day-header { background: linear-gradient(to right, #2563eb, #1d4ed8); color: white; padding: 16px 24px; }
+        .day-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        .day-info { color: #bfdbfe; font-size: 14px; }
+        .day-content { padding: 24px; }
+        .timeline { position: relative; }
+        .timeline::before { content: ''; position: absolute; left: 48px; top: 0; bottom: 0; width: 4px; background: #e5e7eb; }
+        .exam-item { position: relative; padding-left: 96px; margin-bottom: 16px; }
+        .exam-time { position: absolute; left: 0; top: 8px; font-size: 14px; font-weight: 700; color: #374151; width: 48px; }
+        .timeline-dot { position: absolute; left: 40px; top: 12px; width: 20px; height: 20px; border-radius: 50%; border: 4px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .timeline-dot.grade-1 { background: #3b82f6; }
+        .timeline-dot.grade-2 { background: #10b981; }
+        .timeline-dot.grade-4 { background: #8b5cf6; }
+        .exam-card { border: 2px solid; border-radius: 12px; padding: 16px; transition: all 0.2s; }
+        .exam-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .exam-card.grade-1 { border-color: #93c5fd; background: #dbeafe; }
+        .exam-card.grade-2 { border-color: #6ee7b7; background: #d1fae5; }
+        .exam-card.grade-4 { border-color: #c4b5fd; background: #ede9fe; }
+        .exam-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .grade-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; color: white; }
+        .grade-badge.grade-1 { background: #3b82f6; }
+        .grade-badge.grade-2 { background: #10b981; }
+        .grade-badge.grade-4 { background: #8b5cf6; }
+        .exam-code { font-size: 12px; color: #6b7280; }
+        .homework-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; background: #f97316; color: white; }
+        .exam-name { font-size: 18px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
+        .exam-duration { font-size: 14px; color: #6b7280; }
+        .student-count { position: absolute; right: 16px; top: 16px; padding: 8px 12px; background: white; border-radius: 8px; border: 2px solid #e5e7eb; font-weight: 700; color: #374151; }
+        .download-btn { width: 100%; padding: 16px; background: #2563eb; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 24px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); transition: all 0.2s; }
+        .download-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4); }
+        .success-msg { position: fixed; bottom: 24px; right: 24px; background: #10b981; color: white; padding: 16px 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display: none; }
+        .success-msg.show { display: block; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(400px); } to { transform: translateX(0); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Bahar Dönemi Ara Sınavları 2025-2026</h1>
+            <p>KTÜ Sürmene Deniz Bilimleri Fakültesi - İnteraktif Zaman Çizelgesi</p>
+            <div class="filters">
+                <span class="filter-label">Sınıflar:</span>
+                <button class="grade-btn active-1" onclick="toggleGrade(1)">1. Sınıf (12)</button>
+                <button class="grade-btn active-2" onclick="toggleGrade(2)">2. Sınıf (8)</button>
+                <button class="grade-btn active-4" onclick="toggleGrade(4)">4. Sınıf (10)</button>
+                <div class="stats">
+                    <div class="stat-box exams">📊 <span id="exam-count">30</span> sınav</div>
+                    <div class="stat-box students">👥 <span id="student-count">2717</span> öğrenci</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="timeline-container"></div>
+
+        <button class="download-btn" onclick="downloadICS()">⬇️ Takvim Dosyası İndir (ICS)</button>
+    </div>
+
+    <div class="success-msg" id="success-msg">✅ Takvim dosyası başarıyla indirildi!</div>
+
+    <script>
+        const exams = [
+            {grade:1,code:'DUM1002',name:'Matematik II',date:'06.04.2026',time:'13:00',duration:90,students:143,day:'Pazartesi'},
+            {grade:1,code:'YDI1008',name:'İngilizce II',date:'06.04.2026',time:'11:00',duration:90,students:125,day:'Pazartesi'},
+            {grade:1,code:'DEC1010',name:'Maritime Chemistry',date:'06.04.2026',time:'11:00',duration:90,students:2,day:'Pazartesi'},
+            {grade:1,code:'DEC1020',name:'Navigation II',date:'07.04.2026',time:'15:00',duration:90,students:137,day:'Salı'},
+            {grade:1,code:'DEC1024',name:'Eng. For Deck Off. I',date:'07.04.2026',time:'10:00',duration:90,students:117,day:'Salı'},
+            {grade:1,code:'DEC1008',name:'Safety at Sea II',date:'07.04.2026',time:'09:00',duration:90,students:1,day:'Salı'},
+            {grade:1,code:'DUM1006',name:'Vardiya Stand.I',date:'08.04.2026',time:'11:00',duration:90,students:149,day:'Çarşamba'},
+            {grade:1,code:'AITB4000',name:'Atatürk İlk. ve İnk. Tar.II',date:'08.04.2026',time:'14:00',duration:90,students:69,day:'Çarşamba'},
+            {grade:1,code:'TDB1000',name:'Türk Dili',date:'08.04.2026',time:'13:00',duration:90,students:110,day:'Çarşamba'},
+            {grade:1,code:'DEC1018',name:'Seamanship II',date:'09.04.2026',time:'16:15',duration:90,students:116,day:'Perşembe'},
+            {grade:1,code:'DEC1012',name:'Ship Construction',date:'09.04.2026',time:'11:00',duration:90,students:113,day:'Perşembe'},
+            {grade:1,code:'DEC1016',name:'Phy.Fit. and Swimming',date:'10.04.2026',time:'13:00',duration:90,students:122,day:'Cuma'},
+            {grade:2,code:'DUM2016',name:'Elektrik Elektronik',date:'06.04.2026',time:'09:30',duration:90,students:109,day:'Pazartesi'},
+            {grade:2,code:'DUM2006',name:'Gemi Manevrası',date:'07.04.2026',time:'11:15',duration:90,students:114,day:'Salı'},
+            {grade:2,code:'DUM2014',name:'Matematik IV',date:'07.04.2026',time:'13:15',duration:90,students:142,day:'Salı'},
+            {grade:2,code:'DUM2018',name:'Vardiya Standartları II',date:'08.04.2026',time:'16:00',duration:90,students:110,day:'Çarşamba'},
+            {grade:2,code:'DEC2008',name:'Electronic Nav.Sys.',date:'09.04.2026',time:'09:00',duration:90,students:138,day:'Perşembe'},
+            {grade:2,code:'DEC2000',name:'Ship Stability',date:'09.04.2026',time:'13:00',duration:90,students:122,day:'Perşembe'},
+            {grade:2,code:'DUM2020',name:'Göksel Seyir',date:'10.04.2026',time:'09:00',duration:90,students:142,day:'Cuma'},
+            {grade:2,code:'DUM2002',name:'Denizcilik Ekonomisi',date:'10.04.2026',time:'11:30',duration:90,students:103,day:'Cuma'},
+            {grade:4,code:'DUM4004',name:'Yöneylem Araş.',date:'06.04.2026',time:'15:00',duration:90,students:88,day:'Pazartesi'},
+            {grade:4,code:'DUM4022',name:'Tanker İşlemleri',date:'07.04.2026',time:'09:00',duration:90,students:84,day:'Salı'},
+            {grade:4,code:'DUM4010',name:'Lojistik Yönetimi',date:'07.04.2026',time:'16:15',duration:90,students:87,day:'Salı'},
+            {grade:4,code:'DEC4000',name:'Maritime Eng.',date:'08.04.2026',time:'00:00',duration:0,students:86,day:'Çarşamba',isHomework:true},
+            {grade:4,code:'DUM4016',name:'Uluslarası Denizcilik Sözleşmesi II',date:'08.04.2026',time:'09:30',duration:90,students:90,day:'Çarşamba'},
+            {grade:4,code:'DEC4002',name:'Ship Handling',date:'08.04.2026',time:'15:00',duration:90,students:100,day:'Çarşamba'},
+            {grade:4,code:'DUM4006',name:'Deniz Hukuku II',date:'09.04.2026',time:'15:00',duration:90,students:15,day:'Perşembe'},
+            {grade:4,code:'DUM4018',name:'Deniz Hukuku ve Deniz Sigortaları',date:'09.04.2026',time:'15:00',duration:90,students:80,day:'Perşembe'},
+            {grade:4,code:'DUM4020',name:'Gemi Teknik İşletmeciliği',date:'10.04.2026',time:'10:30',duration:90,students:78,day:'Cuma'},
+            {grade:4,code:'DUM4002',name:'Dnz.Sig.Tek.İş.',date:'11.04.2026',time:'10:00',duration:90,students:6,day:'Cumartesi'}
+        ];
+
+        let selectedGrades = [1, 2, 4];
+
+        function toggleGrade(grade) {
+            const btn = document.querySelector(`.grade-btn.active-${grade}, .grade-btn.inactive[onclick="toggleGrade(${grade})"]`);
+            if (selectedGrades.includes(grade)) {
+                selectedGrades = selectedGrades.filter(g => g !== grade);
+                btn.className = 'grade-btn inactive';
+            } else {
+                selectedGrades.push(grade);
+                btn.className = `grade-btn active-${grade}`;
+            }
+            renderTimeline();
+            updateStats();
+        }
+
+        function updateStats() {
+            const filtered = exams.filter(e => selectedGrades.includes(e.grade) && !e.isHomework);
+            const total = filtered.reduce((sum, e) => sum + e.students, 0);
+            document.getElementById('exam-count').textContent = filtered.length;
+            document.getElementById('student-count').textContent = total;
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            const byDate = {};
+            exams.forEach(exam => {
+                if (!byDate[exam.date]) byDate[exam.date] = [];
+                byDate[exam.date].push(exam);
+            });
+
+            const dates = Object.keys(byDate).sort((a, b) => {
+                const [d1, m1, y1] = a.split('.');
+                const [d2, m2, y2] = b.split('.');
+                return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
+            });
+
+            container.innerHTML = dates.map(date => {
+                const dayExams = byDate[date].filter(e => selectedGrades.includes(e.grade));
+                if (dayExams.length === 0) return '';
+                
+                const totalStudents = dayExams.reduce((sum, e) => sum + e.students, 0);
+                const firstExam = dayExams[0];
+                
+                return `
+                    <div class="day-section visible">
+                        <div class="day-header">
+                            <div class="day-title">${firstExam.day} - ${date}</div>
+                            <div class="day-info">${dayExams.length} sınav • 👥 ${totalStudents} öğrenci</div>
+                        </div>
+                        <div class="day-content">
+                            <div class="timeline">
+                                ${dayExams.sort((a, b) => a.time.localeCompare(b.time)).map(exam => `
+                                    <div class="exam-item">
+                                        <div class="exam-time">${exam.isHomework ? 'ÖDEV' : exam.time}</div>
+                                        <div class="timeline-dot grade-${exam.grade}"></div>
+                                        <div class="exam-card grade-${exam.grade}">
+                                            <div class="exam-header">
+                                                <span class="grade-badge grade-${exam.grade}">${exam.grade}. Sınıf</span>
+                                                <span class="exam-code">${exam.code}</span>
+                                                ${exam.isHomework ? '<span class="homework-badge">ÖDEV</span>' : ''}
+                                            </div>
+                                            <div class="exam-name">${exam.name}</div>
+                                            ${!exam.isHomework ? `<div class="exam-duration">Süre: ${exam.duration} dakika</div>` : ''}
+                                            <div class="student-count">👥 ${exam.students}</div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function downloadICS() {
+            const filtered = exams.filter(e => selectedGrades.includes(e.grade) && !e.isHomework);
+            const total = filtered.length;
+            const totalStudents = filtered.reduce((sum, e) => sum + e.students, 0);
+
+            let stats = '📊 ARA SINAV İSTATİSTİKLERİ\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n\\n';
+            stats += `Toplam Ara Sınav: ${total}\\nToplam Öğrenci: ${totalStudents}\\n\\n`;
+            stats += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\nSINIF BAZINDA DAĞILIM\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n\\n';
+            [1,2,4].forEach(g => {
+                const gExams = filtered.filter(e => e.grade === g);
+                if (gExams.length > 0) {
+                    const gStudents = gExams.reduce((sum, e) => sum + e.students, 0);
+                    stats += `${g}. Sınıf: ${gExams.length} sınav - ${gStudents} öğrenci\\n`;
+                }
+            });
+            stats += '\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n\\n';
+            stats += 'KTÜ Sürmene Deniz Bilimleri Fakültesi\\nDeniz Ulaştırma İşletme Mühendisliği Bölümü\\n2025-2026 Bahar Dönemi Ara Sınavları';
+
+            let ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//KTÜ Sürmene//Ara Sınav Takvimi//TR\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:KTÜ Bahar Ara Sınavları (${total} sınav)\nX-WR-TIMEZONE:Europe/Istanbul\nX-WR-CALDESC:${stats}\n`;
+
+            filtered.forEach((exam, idx) => {
+                const [d, m, y] = exam.date.split('.');
+                const [h, min] = exam.time.split(':');
+                const eh = parseInt(h) + Math.floor(exam.duration / 60);
+                const emin = parseInt(min) + (exam.duration % 60);
+                const start = `${y}${m}${d}T${h}${min}00`;
+                const end = `${y}${m}${d}T${eh.toString().padStart(2,'0')}${emin.toString().padStart(2,'0')}00`;
+                const desc = `Sınav ${idx+1}/${total}\\n${exam.students} öğrenci\\nSınav Türü: Ara Sınav\\nDers Kodu: ${exam.code}`;
+                
+                ics += `\nBEGIN:VEVENT\nUID:${exam.code}-ara-${exam.date}@ktu.edu.tr\nDTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z\nDTSTART:${start}\nDTEND:${end}\nSUMMARY:${idx+1}/${total} - ${exam.name}\nDESCRIPTION:${desc}\nSTATUS:CONFIRMED\nSEQUENCE:0\nBEGIN:VALARM\nACTION:DISPLAY\nDESCRIPTION:${exam.name} ara sınavı 1 gün sonra\nTRIGGER:-P1D\nEND:VALARM\nBEGIN:VALARM\nACTION:DISPLAY\nDESCRIPTION:${exam.name} ara sınavı 15 dakika sonra\nTRIGGER:-PT15M\nEND:VALARM\nEND:VEVENT`;
+            });
+
+            ics += '\nEND:VCALENDAR';
+
+            const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'ktu_bahar_ara_sinavlari_2025-2026.ics';
+            link.click();
+
+            const msg = document.getElementById('success-msg');
+            msg.classList.add('show');
+            setTimeout(() => msg.classList.remove('show'), 3000);
+        }
+
+        renderTimeline();
+        updateStats();
+    </script>
+</body>
+</html>
